@@ -1,0 +1,21 @@
+name: Upgrade release tools
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * 2"
+permissions: {}
+concurrency:
+  group: upgrade-release-tools
+  cancel-in-progress: false
+jobs:
+  upgrade:
+    uses: tox-dev/github-workflows/.github/workflows/upgrade-release-tools.yaml@80ce6db702c52e364d49d01aea70a145a8a95930 # v5.0.2
+    permissions:
+      contents: read
+    secrets:
+      RELEASE_APP_PRIVATE_KEY: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+    with:
+      commit-message: "build(deps): refresh release lock"
+      pull-request-title: "build(deps): refresh full project lock"
+      pull-request-body: |-
+        Relock `pylock.toml` under the seven-day cooldown.
